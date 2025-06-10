@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ImmoWeb - Vente de Biens Immobiliers</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- En-tête de la page -->
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">ImmoWeb</a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="listings.php?type=vente" class="active">Vente</a></li>
+                    <li><a href="listings.php?type=location">Location</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <a href="#" class="btn-login">S'identifier</a>
+                <a href="#" class="btn-register">S'inscrire</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Section Héro avec le titre et le slogan -->
+    <div class="hero-section">
+        <div class="container">
+            <h1>Trouvez la propriété de vos rêves à vendre</h1>
+            <p>Des chambres confortables aux villas luxueuses, votre nouveau chez-vous vous attend.</p>
+        </div>
+    </div>
+
+    <!-- Barre de recherche détaillée qui soumet au fichier listings.php -->
+    <div class="search-form-container">
+        <div class="container">
+            <form action="listings.php" method="GET" class="detailed-search-form">
+                <!-- Champ caché pour indiquer que nous cherchons des biens à vendre -->
+                <input type="hidden" name="type" value="vente">
+                
+                <div class="form-group">
+                    <label for="location"><i class="fas fa-map-marker-alt"></i> Lieu</label>
+                    <input type="text" id="location" name="location" placeholder="Ville, adresse ou région">
+                </div>
+                
+                <div class="form-group">
+                    <label for="check-in-date"><i class="fas fa-calendar-alt"></i> Dates</label>
+                    <input type="date" id="check-in-date" name="check_in_date">
+                    <span>-</span>
+                    <input type="date" id="check-out-date" name="check_out_date">
+                </div>
+                
+                <div class="form-group">
+                    <label for="adults"><i class="fas fa-user-friends"></i> Personnes</label>
+                    <div class="guest-counter">
+                        <span class="guest-label">Adultes:</span>
+                        <input type="number" id="adults" name="adults" min="1" value="1">
+                    </div>
+                    <div class="guest-counter">
+                        <span class="guest-label">Enfants:</span>
+                        <input type="number" id="children" name="children" min="0" value="0">
+                    </div>
+                </div>
+                
+                <button type="submit" class="search-submit-button">Rechercher</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Section "Explorer par catégorie" ou "Bien en vedette" -->
+    <div class="container section-explore">
+        <h2>Explorer nos catégories</h2>
+        <div class="category-cards">
+            <!-- Ces liens mèneront à listings.php avec le bon category_id -->
+            <!-- IMPORTANT : Assurez-vous que ces id_categorie (1, 2, 3, 4) correspondent aux IDs réels de vos catégories dans la table Categorie de votre base de données -->
+            <a href="listings.php?category_id=1&type=vente" class="category-card">
+                <img src="https://placehold.co/300x200/C8A2C8/FFFFFF?text=Chambre" alt="Catégorie Chambre">
+                <h3>Chambres</h3>
+            </a>
+            <a href="listings.php?category_id=2&type=vente" class="category-card">
+                <img src="https://placehold.co/300x200/ADD8E6/333333?text=Studio" alt="Catégorie Studio">
+                <h3>Studios</h3>
+            </a>
+            <a href="listings.php?category_id=3&type=vente" class="category-card">
+                <img src="https://placehold.co/300x200/87CEEB/333333?text=Appartement" alt="Catégorie Appartement">
+                <h3>Appartements</h3>
+            </a>
+            <a href="listings.php?category_id=4&type=vente" class="category-card">
+                <img src="https://placehold.co/300x200/6A5ACD/FFFFFF?text=Villa" alt="Catégorie Villa">
+                <h3>Villas</h3>
+            </a>
+            <!-- Vous pouvez ajouter d'autres catégories ici si nécessaire, en ajustant les id_category -->
+        </div>
+    </div>
+
+    <!-- Pied de page du site -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; <?php echo date("Y"); ?> ImmoWeb. Tous droits réservés.</p>
+            <div class="footer-links">
+                <a href="#">Politique de confidentialité</a>
+                <a href="#">Conditions d'utilisation</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
