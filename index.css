@@ -1,0 +1,32 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background: #f8f8f8;
+}
+h1 {
+    color: #333;
+}
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.card {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 15px;
+    width: 300px;
+    border-radius: 5px;
+}
+.card a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 3px;
+}
+.card a:hover {
+    background: #0056b3;
+}
