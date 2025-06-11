@@ -4,6 +4,26 @@ body {
   display: flex;
 }
 
+.badge {
+  background-color: #e74c3c;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  margin-left: 6px;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge i {
+  font-size: 1em;
+  line-height: 1;
+}
+
+
+
 .sidebar {
   width: 220px;
   background: #2c3e50;
