@@ -7,6 +7,8 @@ $bien = $stmt->fetch();
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="details.css">
+
     <title>Détails du bien</title>
     <link rel="stylesheet" href="css/style.css">
 </head>

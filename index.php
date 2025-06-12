@@ -25,7 +25,7 @@
     </style>
 </head>
 <body>
-    <h1>Regardez nos biens à vendre</h1>
+    <h1><em>Regardez nos biens à vendre</em></h1>
     <div class="container">
         <?php
         $stmt = $pdo->query("SELECT * FROM BienImmobilier WHERE type_annonce = 'vente'");
@@ -45,9 +45,10 @@
                 <p>{$row['ville']} - {$row['prix']} fcfa</p>
                 <a href='details.php?id={$row['id_property']}'>Voir plus de détails</a><br>
                 <a href='acheter.php?id={$row['id_property']}'>Acheter ce bien immobilier</a>
+                <a href='IA.php' class='btn-blue'>Voir l'IA pour plus d'édification</a>
             </div>";
         }
         ?>
     </div>
 </body>
-</html>
+</html> 
