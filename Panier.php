@@ -12,49 +12,38 @@
 <body class="panier">
     <a href="Achat.php" class="link">Boutique</a>
     <section>
+         
         <table>
+        
             <tr>
-                <th></th>
+                <th>Image</th>
+              <th>Nom</th>
                 <th>Description</th>
                 <th>Ville</th>
                 <th>Prix</th>
-                <th>Quantité</th>
                 <th>Action</th>
             </tr>
+            <?php 
+            //inclure la page de connexion
+            include_once "con_dbb.php";
+            //afficher la liste des produits
+            $req = mysqli_query($conn, "SELECT * FROM bienimmobilier");
+            while($row = mysqli_fetch_assoc($req)){
+            ?>
             <tr>
-                <td>
-                    <img class="1" src="https://cf.bstatic.com/xdata/images/hotel/square600/695053286.webp?k=df7a9dfbb67a25ff0a459f0e36e149058f76c9ad92ee7efa364990cffd8599c6&o=">
-                </td>
-                <td>Appartement moderne</td>
-                <td>Yde</td>
-                <td>200000</td>
-                <td>5</td>
-                <td><img src="https://www.bing.com/th/id/OIP.-krCIPJCLQdvGv_oKDohcQHaHa?w=202&amp;h=211&amp;c=8&amp;rs=1&amp;qlt=90&amp;o=6&amp;dpr=1.3&amp;pid=3.1&amp;rm=2"></td>
-            </tr>
-            <tr>
-                <td>
-                    <img class="2" src="https://q-xx.bstatic.com/xdata/images/hotel/max500/406623913.jpg?k=9e52c86791b75f416b5dda5bb6ca97be04549f5ee85fff51dd7603cf6256e163&amp;o=" >
-                </td>
-                <td>Appartement de luxe</td>
-                <td>Yde</td>
-                <td>200000</td>
-                <td>5</td>
-                <td><img src="https://www.bing.com/th/id/OIP.-krCIPJCLQdvGv_oKDohcQHaHa?w=202&amp;h=211&amp;c=8&amp;rs=1&amp;qlt=90&amp;o=6&amp;dpr=1.3&amp;pid=3.1&amp;rm=2"></td>
-            </tr>
-            <tr>
-                <td>
-                    <img class="3" src="https://voyage.maresaonline.com/wp-content/uploads/2022/03/13-appartement-meubl%C3%A9-yaounde-tamtam.jpg.jpg?v=1648385085">
-                </td>
-                <td>Appartement simple et moderne</td>
-                <td>Yde</td>
-                <td>200000</td>
-                <td>5</td>
-                <td><img src="https://www.bing.com/th/id/OIP.-krCIPJCLQdvGv_oKDohcQHaHa?w=202&amp;h=211&amp;c=8&amp;rs=1&amp;qlt=90&amp;o=6&amp;dpr=1.3&amp;pid=3.1&amp;rm=2"></td>
-            </tr>
-            <tr class="total">
-                <th>Total : 1000000</th>
-            </tr>
+            
+                <td><img src="<?= $row ['img']?>"></td>
+                <td><?= $row ['nom']?></td>
+                <td><?= $row ['description']?></td>
+                <td><?= $row ['ville']?></td>
+                <td><?= $row ['prix']?></td>
+                <td><img src="<?= $row ['action']?>"></td>
+                <?php } ?>
+            </tr> 
+         
         </table>
+       
     </section>
 </body>
 </html>
+
