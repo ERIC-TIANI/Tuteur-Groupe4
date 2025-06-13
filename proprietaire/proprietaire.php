@@ -14,9 +14,9 @@ $biensStmt = $pdo->prepare("SELECT COUNT(*) FROM bienimmobilier WHERE id_user = 
 $biensStmt->execute([$id_user]);
 $nbBiens = $biensStmt->fetchColumn();
 
-$demandesStmt = $pdo->prepare("SELECT COUNT(*) FROM demandes WHERE id_user = ? AND statut = 'en_attente'");
+$demandesStmt = $pdo->prepare("SELECT COUNT(*) FROM reservation WHERE id_user = ? AND statut = 'en_attente'");
 $demandesStmt->execute([$id_user]);
-$nbDemandes = $demandesStmt->fetchColumn();
+ $nbDemandes = $demandesStmt->fetchColumn();
 
 $locationsStmt = $pdo->prepare("SELECT COUNT(*) FROM contrats WHERE id_user = ? AND date_fin > NOW()");
 $locationsStmt->execute([$id_user]);
@@ -202,8 +202,8 @@ $nbLocationsActives = $locationsStmt->fetchColumn();
                     <a href="mes_biens.php" class="nav-link">
                         <i class="bi bi-house"></i> Mes biens
                     </a>
-                    <a href="demandes.php" class="nav-link">
-                        <i class="bi bi-envelope"></i> Demandes
+                    <a href="reservation_list.php" class="nav-link">
+                        <i class="bi bi-envelope"></i> Reservation
                         <?php if ($nbDemandes > 0): ?>
                             <span class="badge bg-danger ms-auto"><?= $nbDemandes ?></span>
                         <?php endif; ?>

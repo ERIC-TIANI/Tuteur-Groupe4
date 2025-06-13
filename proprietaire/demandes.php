@@ -1,117 +1,194 @@
 <?php
 session_start();
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'proprietaire') {
-    header("Location: auth.php");
-    exit;
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "immo_web";
+
+try {
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8", $username, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    ]);
+} catch (PDOException $e) {
+    die("Erreur de connexion : " . $e->getMessage());
 }
 
-require 'config.php';
-$id_proprietaire = $_SESSION['id_user'];
+// Vérifier que l'utilisateur est connecté (exemple simple)
+if (!isset($_SESSION['id_user'])) {
+    die("Accès refusé. Veuillez vous connecter.");
+}
 
-// Traitement des actions (accepter/refuser)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_reservation'], $_POST['action'])) {
-    $id_res = $_POST['id_reservation'];
-    $action = $_POST['action'];
+$id_user_connecte = $_SESSION['id_user'];
 
-    if (in_array($action, ['acceptee', 'refusee'])) {
-        $update = $pdo->prepare("UPDATE reservation SET statut = ? WHERE id_reservation = ?");
-        $update->execute([$action, $id_res]);
+// Traitement du changement de statut
+$message_flash = '';
+if (isset($_GET['action'], $_GET['id'])) {
+    $action = $_GET['action'];
+    $id_demande = (int)$_GET['id'];
 
-        // Envoi d'email
-        $info = $pdo->prepare("SELECT u.email, b.titre FROM reservation r 
-                               JOIN utilisateur u ON r.id_user = u.id_user 
-                               JOIN bienimmobilier b ON r.id_property = b.id_property
-                               WHERE r.id_reservation = ?");
-        $info->execute([$id_res]);
-        $result = $info->fetch();
+    if (in_array($action, ['valider', 'refuser'])) {
+        $nouveau_statut = ($action === 'valider') ? 'validé' : 'refusé';
 
-        if ($result && filter_var($result['email'], FILTER_VALIDATE_EMAIL)) {
-            $to = $result['email'];
-            $subject = "Statut de votre demande pour : " . $result['titre'];
-            $message = "Bonjour,\n\nVotre demande a été " . ($action === 'acceptee' ? "acceptée" : "refusée") . ".\n\nMerci pour votre intérêt.";
-            $headers = "From: no-reply@immo_web.com";
-
-            @mail($to, $subject, $message, $headers);
+        try {
+            $update = $conn->prepare("UPDATE demandes SET statut = :statut WHERE id = :id");
+            $update->execute([
+                ':statut' => $nouveau_statut,
+                ':id' => $id_demande,
+            ]);
+            $message_flash = "La demande #$id_demande a bien été mise à jour (statut : $nouveau_statut).";
+        } catch (Exception $e) {
+            $message_flash = "Erreur lors de la mise à jour : " . $e->getMessage();
         }
     }
 }
 
-// Récupération des demandes
-$sql = "SELECT r.*, b.titre AS bien_titre, u.nom AS client_nom, u.prenom AS client_prenom, u.email AS client_email
-        FROM reservation r
-        JOIN bienimmobilier b ON r.id_property = b.id_property
-        JOIN utilisateur u ON r.id_user = u.id_user
-        WHERE b.id_user = ?
-        ORDER BY r.date_demande DESC";
-$stmt = $pdo->prepare($sql);
-$stmt->execute([$id_proprietaire]);
-$demandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Requête pour récupérer les demandes
+// Optionnel : ne récupérer que celles des biens appartenant à l'utilisateur connecté
+// Pour cela, on suppose que la table 'bienimmobilier' a une colonne 'id_user' qui est le propriétaire
+
+$sql = "SELECT d.*, b.titre 
+        FROM demandes d 
+        JOIN bienimmobilier b ON d.id_property = b.id_property
+        WHERE b.id_user = :id_user
+        ORDER BY d.date_creation DESC";
+$stmt = $conn->prepare($sql);
+$stmt->execute([':id_user' => $id_user_connecte]);
+
+
+/*$sql = "SELECT d.*, b.titre 
+        FROM demandes d 
+        LEFT JOIN bienimmobilier b ON d.id_property = b.id_property
+        ORDER BY d.date_creation DESC";
+$stmt = $conn->query($sql);
+*/
+$demandes = $stmt->fetchAll();
+
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Demandes reçues</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <title>Gestion des demandes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f9f9f9;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background: white;
+        }
+        th, td {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        th {
+            background: #4CAF50;
+            color: white;
+            text-align: left;
+        }
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-right: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-valider {
+            background-color: #28a745;
+        }
+        .btn-refuser {
+            background-color: #dc3545;
+        }
+        .statut-validé {
+            color: green;
+            font-weight: bold;
+        }
+        .statut-refusé {
+            color: red;
+            font-weight: bold;
+        }
+        .statut-en_attente, .statut-en attente {
+            color: orange;
+            font-weight: bold;
+        }
+        .flash-message {
+            background-color: #dff0d8;
+            border: 1px solid #3c763d;
+            padding: 10px 15px;
+            color: #3c763d;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 0;
+            font-family: inherit;
+            font-size: 0.95em;
+        }
+    </style>
 </head>
-<body class="bg-light">
-<div class="container my-5">
-    <h2 class="mb-4 text-center">Demandes reçues pour vos biens</h2>
+<body>
 
-    <?php if (count($demandes) > 0): ?>
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover bg-white">
-                <thead class="table-light">
-                    <tr>
-                        <th>Bien</th>
-                        <th>Client</th>
-                        <th>Email</th>
-                        <th>Date visite</th>
-                        <th>Message</th>
-                        <th>Statut</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($demandes as $demande): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($demande['bien_titre']) ?></td>
-                            <td><?= htmlspecialchars($demande['client_prenom'] . ' ' . $demande['client_nom']) ?></td>
-                            <td><?= htmlspecialchars($demande['client_email']) ?></td>
-                            <td><?= htmlspecialchars($demande['date_visite']) ?></td>
-                            <td><?= nl2br(htmlspecialchars($demande['message'])) ?></td>
-                            <td>
-                                <?php
-                                    $statut = $demande['statut'] ?? 'en_attente';
-                                    if ($statut === 'acceptee') {
-                                        echo '<span class="badge bg-success">Acceptée</span>';
-                                    } elseif ($statut === 'refusee') {
-                                        echo '<span class="badge bg-danger">Refusée</span>';
-                                    } else {
-                                        echo '<span class="badge bg-secondary">En attente</span>';
-                                    }
-                                ?>
-                            </td>
-                            <td>
-                                <?php if ($statut === 'en_attente'): ?>
-                                    <form method="POST" class="d-flex gap-1">
-                                        <input type="hidden" name="id_reservation" value="<?= $demande['id_reservation'] ?>">
-                                        <button name="action" value="acceptee" class="btn btn-sm btn-success">Accepter</button>
-                                        <button name="action" value="refusee" class="btn btn-sm btn-danger">Refuser</button>
-                                    </form>
-                                <?php else: ?>
-                                    <em>Traité</em>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-    <?php else: ?>
-        <div class="alert alert-info text-center">Aucune demande reçue pour l’instant.</div>
-    <?php endif; ?>
-</div>
+<h1>Gestion des demandes de réservation</h1>
+
+<?php if ($message_flash): ?>
+    <div class="flash-message"><?= htmlspecialchars($message_flash) ?></div>
+<?php endif; ?>
+
+<?php if (empty($demandes)): ?>
+    <p>Aucune demande à afficher.</p>
+<?php else: ?>
+    <table>
+        <thead>
+            <tr>
+                <th>ID Demande</th>
+                <th>Bien concerné</th>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Message</th>
+                <th>Date de la demande</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($demandes as $d): ?>
+                <tr>
+                    <td><?= htmlspecialchars($d['id']) ?></td>
+                    <td><?= htmlspecialchars($d['titre'] ?? 'N/A') ?></td>
+                    <td><?= htmlspecialchars($d['nom']) ?></td>
+                    <td><a href="mailto:<?= htmlspecialchars($d['email']) ?>"><?= htmlspecialchars($d['email']) ?></a></td>
+                    <td><pre><?= htmlspecialchars($d['message']) ?></pre></td>
+                    <td><?= htmlspecialchars($d['date_creation']) ?></td>
+                    <td class="statut-<?= str_replace([' ', '-'], '_', strtolower($d['statut'])) ?>">
+                        <?= htmlspecialchars($d['statut']) ?>
+                    </td>
+                    <td>
+                        <?php if ($d['statut'] === 'en attente'): ?>
+                            <a href="?action=valider&id=<?= $d['id'] ?>" class="btn btn-valider" onclick="return confirm('Valider la demande #<?= $d['id'] ?> ?');">Valider</a>
+                            <a href="?action=refuser&id=<?= $d['id'] ?>" class="btn btn-refuser" onclick="return confirm('Refuser la demande #<?= $d['id'] ?> ?');">Refuser</a>
+                        <?php else: ?>
+                            <em>Action terminée</em>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>
+
 </body>
 </html>

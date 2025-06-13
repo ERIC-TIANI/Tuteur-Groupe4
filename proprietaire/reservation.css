@@ -1,0 +1,94 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f6fa;
+    margin: 0;
+    padding: 0;
+}
+
+.main-content {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: #2f3640;
+    font-size: 24px;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+table thead {
+    background-color: #3498db;
+    color: white;
+}
+
+table th, table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table tbody tr:hover {
+    background-color: #f0f8ff;
+}
+
+.btn-valide {
+    background-color: #27ae60;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.btn-refus {
+    background-color: #e74c3c;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.btn-suppr {
+    background-color: #c0392b;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.btn-valide:hover,
+.btn-refus:hover,
+.btn-suppr:hover {
+    opacity: 0.85;
+}
+
+a[href="admin_dashboard.php"] {
+    display: inline-block;
+    margin-top: 20px;
+    color: #3498db;
+    font-weight: bold;
+}
