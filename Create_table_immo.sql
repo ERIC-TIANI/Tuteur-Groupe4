@@ -12,7 +12,8 @@ CREATE TABLE Utilisateur (
     nationalite varchar (60),
     email VARCHAR(150) UNIQUE,
     mot_de_passe VARCHAR(255),
-    role ENUM('client', 'proprietaire', 'admin') NOT NULL DEFAULT "client"
+    role ENUM('client', 'proprietaire', 'admin') NOT NULL DEFAULT "client",
+    photo varchar(255)
 );
 
 -- 2. Catégorie
@@ -31,6 +32,7 @@ CREATE TABLE BienImmobilier (
     type_annonce ENUM('location', 'vente') NOT NULL,
     adresse VARCHAR(255),
     ville VARCHAR(100),
+    pays varchar(100),
     prix DECIMAL(10, 2),
     mode_tarif ENUM('fixe', 'par_nuit'),
     superficie FLOAT,
@@ -165,3 +167,13 @@ CREATE TABLE Indisponibilite (
     raison TEXT,
     FOREIGN KEY (id_property) REFERENCES BienImmobilier(id_property)
 );
+
+
+CREATE TABLE contrats (
+  id int(11) NOT NULL,
+  id_user int(11) NOT NULL,
+  id_client int(11) NOT NULL,
+  id_property int(11) NOT NULL,
+  date_debut date NOT NULL,
+  date_fin date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
