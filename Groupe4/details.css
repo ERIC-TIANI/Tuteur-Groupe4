@@ -1,0 +1,58 @@
+/* Style général */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+/* Titre */
+h1 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+/* Paragraphes */
+p {
+    background-color: #fff;
+    padding: 15px;
+    border-left: 5px solid #3498db;
+    margin: 10px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Liens */
+a {
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    background-color: #3498db;
+    padding: 10px 20px;
+    margin-top: 20px;
+    margin-right: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+a:hover {
+    background-color: #2980b9;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    a {
+        padding: 8px 16px;
+        font-size: 0.9em;
+    }
+}

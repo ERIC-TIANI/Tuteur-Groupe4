@@ -1,0 +1,98 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+.main-content {
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 0px;
+    background-color: #fff;
+    min-height: 100vh;
+}
+
+header h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.filters {
+    margin-bottom: 15px;
+}
+
+.filters form {
+    display: inline-block;
+    font-size: 14px;
+}
+
+.filters select {
+    padding: 5px 10px;
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    vertical-align: top;
+}
+
+table th {
+    background-color: #f0f0f0;
+    color: #333;
+    font-weight: bold;
+}
+
+table td {
+    background-color: #fff;
+}
+
+.btn-suppr {
+    background-color: #e74c3c;
+    color: white;
+    padding: 6px 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 13px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-suppr:hover {
+    background-color: #c0392b;
+}
+
+a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+/* Bouton retour stylisé */
+.btn-retour {
+    display: inline-block;
+    margin-top: 20px;
+    background-color: #3498db;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-retour:hover {
+    background-color: #2980b9;
+}
